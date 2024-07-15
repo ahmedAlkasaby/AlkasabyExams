@@ -21,7 +21,7 @@
          <!-- Navigation -->
      <nav id="nav">
         <ul class="main-menu nav navbar-nav navbar-right">
-            <li><a href="">@lang('website.home')</a></li>
+            <li><a href="{{ route('home') }}">@lang('website.home')</a></li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Categories <span class="caret"></span></a>
                <x-nav-bar></x-nav-bar>
@@ -63,6 +63,12 @@
                 </div>
             </li>
         @endguest
+        @auth
+            @if (auth()->user()->role_id>1)
+            <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+
+            @endif
+        @endauth
         </ul>
     </nav>
     <!-- /Navigation -->
