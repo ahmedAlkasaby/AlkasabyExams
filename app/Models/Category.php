@@ -10,10 +10,16 @@ class Category extends Model
     protected $fillable=['name','slug'];
     use HasFactory;
 
+
+
+
     public function skills()
     {
         return $this->hasMany(Skill::class);
     }
+
+
+    
 
 
 }

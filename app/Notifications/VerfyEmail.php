@@ -33,7 +33,7 @@ class VerfyEmail extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $code=$this->otp->generate($notifiable->email,'numeric',6,1);
+        $code=$this->otp->generate($notifiable->email,'numeric',6,10);
         return (new MailMessage)
                                 ->greeting('Verfy Email')
                                 ->line('code : '.$code->token)

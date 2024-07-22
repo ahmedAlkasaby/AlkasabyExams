@@ -28,6 +28,27 @@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-skill">
                     New
                 </button>
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <form action="{{ route('allSkills') }}" method="GET">
+                            <input type="text" name="search" class="form-control float-right" placeholder="Search"
+                                value="{{ request('search') }}">
+                                <select  name="category"  class="custom-select" >
+                                    <option value="">select Category</option>
+                                    @foreach ($categories as $category)
+                                    <option {{ request('category') == $category->id ? 'selected' : ''}} value="{{ $category->id }}">{{ json_decode($category->name)->en }}</option>
+                                    
+                                    @endforeach
+                                </select>
+
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-default">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
                @include('admin.includes.models')
             </div>

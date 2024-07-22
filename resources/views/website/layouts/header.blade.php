@@ -21,26 +21,31 @@
          <!-- Navigation -->
      <nav id="nav">
         <ul class="main-menu nav navbar-nav navbar-right">
-            <li><a href="{{ route('home') }}">@lang('website.home')</a></li>
+            <li><a href="{{ route('home_home') }}">{{ __('website.home') }}</a></li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Categories <span class="caret"></span></a>
                <x-nav-bar></x-nav-bar>
 
             </li>
             <li><a href="contact.html">@lang('website.contact')</a></li>
-            <li><a href="{{ route('lang',['lang'=>'en']) }}">English</a></li>
+            @if (App::getlocale() =="en")
+
             <li><a href=" {{ route('lang',['lang'=>'ar']) }} ">Arabic</a></li>
+
+            @else
+            <li><a href="{{ route('lang',['lang'=>'en']) }}">English</a></li>
+            @endif
             {{-- <li><a href="login.html">Sign In</a></li>
             <li><a href="register.html">Sign Up</a></li> --}}
             @guest
             @if (Route::has('login'))
-                <li class="nav-item">
+                <li class="nav-item" wire:navigate>
                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                 </li>
             @endif
 
             @if (Route::has('register'))
-                <li class="nav-item">
+                <li class="nav-item" wire:navigate>
                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                 </li>
             @endif
@@ -65,7 +70,7 @@
         @endguest
         @auth
             @if (auth()->user()->role_id>1)
-            <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+            <li wire:navigate><a href="{{ route('dashboard') }}">Dashboard</a></li>
 
             @endif
         @endauth

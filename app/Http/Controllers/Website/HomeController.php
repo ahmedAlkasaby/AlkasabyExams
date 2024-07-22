@@ -15,10 +15,12 @@ class HomeController extends Controller
 {
     public function popularExams(){
 
-        $popularExams=Exam::withCount('users')
-            ->orderBy('users_count', 'desc')
-            ->get();
-        return view('website.home',compact('popularExams'));
+        $exams=new Exam();
+     
+        // $popularExams=Exam::withCount('users')
+        //     ->orderBy('users_count', 'desc')
+        //     ->get();
+        return view('website.home',['popularExams'=>$exams->mostExams()]);
     }
 
 

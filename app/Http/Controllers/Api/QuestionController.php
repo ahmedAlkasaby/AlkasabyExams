@@ -51,8 +51,6 @@ class QuestionController extends Controller
             $access_token=$request->header('access_token');
             $user=User::where('access_token',$access_token)->first();
 
-
-
             $exam=Exam::find($examId);
 
             $questions=$exam->questionsExam;
@@ -71,44 +69,58 @@ class QuestionController extends Controller
             ->where('exam_id',$examId)
             ->first();
 
-            $endExam=Carbon::now();
+            if($pivoteRecord){
+                $endExam=Carbon::now();
 
-            $startExam=$pivoteRecord->created_at;
 
-            $durationOfExam=$endExam->diffInMinutes($startExam);
+                $startExam=$pivoteRecord->created_at;
 
-            // dd($durationOfExam);
+                $durationOfExam=$endExam->diffInMinutes($startExam);
 
-            // if($durationOfExam > $exam->duration_minates){
-            //     DB::table('exam_user')
-            //     ->where('user_id',$user->id)
-            //     ->where('exam_id',$examId)
-            //     ->update([
-            //         'result'=>0,
-            //         'duration_min'=>$durationOfExam
-            //     ]);
+                // dd($durationOfExam);
+                
+                // if($durationOfExam > $exam->duration_minates){
+                //     DB::table('exam_user')
+                //     ->where('user_id',$user->id)
+                //     ->where('exam_id',$examId)
+                //     ->update([
+                //         'result'=>0,
+                //         'duration_min'=>$durationOfExam
+                //     ]);
 
-            //     return response()->json([
-            //     'result'=>0,
-            //     'reson'=>' لانك سلمت بعد الوقت '
-            // ]);
+                //     return response()->json([
+                //     'result'=>0,
+                //     'reson'=>' لانك سلمت بعد الوقت '
+                // ]);
 
-            // }
+                // }
 
-            $result=($points/$question->count())*100;
+                $result=($points/$question->count())*100;
 
-            DB::table('exam_user')
-            ->where('user_id',$user->id)
-            ->where('exam_id',$examId)
-            ->update([
-                'result'=>$result,
-                'duration_min'=>$durationOfExam
-            ]);
+                DB::table('exam_user')
+                ->where('user_id',$user->id)
+                ->where('exam_id',$examId)
+                ->update([
+                    'result'=>$result,
+                    'duration_min'=>$durationOfExam
+                ]);
 
-            return response()->json([
-                'message'=>'the Exam Submit Successfully',
-                'score'=>$result
-            ]);
+                $pivoteRecordUpdated=DB::table('exam_user')
+                ->where('user_id',$user->id)
+                ->where('exam_id',$examId)
+                ->first();
+
+                return response()->json([
+                    'message'=>'the Exam Submit Successfully',
+                    'score'=>$pivoteRecordUpdated->result
+                ]);
+            }else{
+                return response()->json([
+                    'message'=>'يجب انا تدخل علي بدايه الامتحان اولا'
+                ]);
+            }
+
+
         }else{
             return response()->json([
                 'message'=>'The Exam Not Found'

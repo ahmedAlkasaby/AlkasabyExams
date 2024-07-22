@@ -13,7 +13,8 @@ use Illuminate\Support\Str;
 class SkillController extends Controller
 {
     public function index(){
-        $skills=Skill::orderBy('id','desc')->paginate(5);
+        // $skills=Skill::orderBy('id','desc')->paginate(5);
+        $skills=Skill::orderBy('id','desc')->filter(request(['search','category']))->paginate(5);
         $categories=Category::get();
         return view('admin.skills',[
             'skills'=>$skills,

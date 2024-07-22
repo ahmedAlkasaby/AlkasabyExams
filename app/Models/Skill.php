@@ -24,4 +24,19 @@ class Skill extends Model
     {
         return $this->hasMany(Exam::class);
     }
+
+    public function scopeFilter($query ,array $filter){
+        $query->when($filter['search'] ?? false ,function($query,$search){
+            $query
+            ->where('name','like','%'.$search.'%')
+            ->orWhere('slug','like','%'.$search.'%')
+            ->get();
+        });
+
+        $query->when($filter['category'] ?? false ,function($query ,$category_id){
+            $query
+            ->where('category_id',$category_id)
+            ->get();
+        });
+    }
 }

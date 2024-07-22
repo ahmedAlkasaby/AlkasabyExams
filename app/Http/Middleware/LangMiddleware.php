@@ -2,12 +2,12 @@
 
 namespace App\Http\Middleware;
 
+use App;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class IsAdminMiddleware
+class LangMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,13 +16,9 @@ class IsAdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(auth()){
-            $user=Auth::user();
-            if($user->role_id == 2 || $user->role_id==3){
-                return $next($request);
-            }else{
-                return abort(404);
-            }
-        }
+        $lang=$request->session()->get("lang");
+        $lang=$lang ?? "en";
+        App::setLocale($lang);
+        return $next($request);
     }
 }

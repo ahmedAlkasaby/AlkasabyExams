@@ -1,20 +1,23 @@
 <?php
 
-use App\Http\Controllers\Admin\Admin\AdminController;
-use App\Http\Controllers\Admin\Category\CategoryController;
-use App\Http\Controllers\Admin\DashBoardController;
-use App\Http\Controllers\Admin\Exam\ExamController;
-use App\Http\Controllers\Admin\Exam\QuestionController;
-use App\Http\Controllers\Admin\Skill\SkillController;
-use App\Http\Controllers\Admin\Student\StudentController;
-use App\Http\Controllers\Auth\RedirectController;
-use App\Http\Controllers\RedirctController;
-use App\Http\Controllers\Website\HomeController;
 use App\Models\Category;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
+
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Controllers\RedirctController;
+use App\Http\Controllers\Website\HomeController;
+use App\Http\Controllers\Auth\RedirectController;
+use App\Http\Controllers\Admin\DashBoardController;
+use App\Http\Controllers\Admin\Exam\ExamController;
+use App\Http\Controllers\Admin\Admin\AdminController;
+use App\Http\Controllers\Admin\Skill\SkillController;
+use App\Http\Controllers\Admin\Exam\QuestionController;
+use App\Http\Controllers\Admin\Student\StudentController;
+use App\Http\Controllers\Admin\Category\CategoryController;
+use Illuminate\Http\Request;
+
 
 
 
@@ -36,25 +39,29 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('lang/{lang}',function($lang){
-    App::setLocale($lang);
+Route::get('lang/{lang}',function($lang ,Request $request){
+$acceptlangs=['en','ar'];
+if(! in_array($lang,$acceptlangs)){
+    $lang="en";
+}
+$request->session()->put("lang",$lang);
     return back();
 })->name('lang');
 
 
 
 
+Route::middleware("lang")->group(function(){
+        Route::get('/',[HomeController::class,'popularExams'])->name('home_home');
+        Route::get('category/{slug}',[HomeController::class, 'category'])->name('category');
+        Route::get('skill/{slug}',[HomeController::class, 'skill'])->name('skill');
+        Route::get('exam/{slug}',[HomeController::class, 'exam'])->name('exam');
+        Route::group(['middleware'=>['auth']],function(){
+            Route::post('questions/exam/{slug}',[HomeController::class, 'questions'])->name('questions')->middleware('can-inter-exam');
+            Route::post('questions/exam/submit/{slug}',[HomeController::class, 'submitExam'])->name('submitExam');
+        });
 
-Route::get('/',[HomeController::class,'popularExams'])->name('home');
-Route::get('category/{slug}',[HomeController::class, 'category'])->name('category');
-Route::get('skill/{slug}',[HomeController::class, 'skill'])->name('skill');
-Route::get('exam/{slug}',[HomeController::class, 'exam'])->name('exam');
-Route::group(['middleware'=>['auth']],function(){
-    Route::post('questions/exam/{slug}',[HomeController::class, 'questions'])->name('questions')->middleware('can-inter-exam');
-    Route::post('questions/exam/submit/{slug}',[HomeController::class, 'submitExam'])->name('submitExam');
 });
-
-
 
 
 Auth::routes([
@@ -115,14 +122,4 @@ Route::group(['prefix'=>'dashboard','middleware'=>['auth','isAdmin']],function()
 
 });
 
- // email verfied
 
-    // index students
-    // show scores of student
-    // delete student and your exams
-
-    // middleware Super admin
-    // index admins
-    // create Admin
-    // up admin to super admin
-    // down admin to user

@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use function PHPSTORM_META\map;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
-use function PHPSTORM_META\map;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
+use Laravel\Scout\Searchable;
 
 class Exam extends Model
 {
@@ -20,6 +22,26 @@ class Exam extends Model
         'slug'
     ];
     use HasFactory;
+
+    use Searchable;
+
+    public function scopeFilter($query,array $filters){
+        $query->when($filters['search'] ?? false ,function($query,$search){
+            $query
+            ->where('name','like','%'.$search.'%')
+            ->get();
+        });
+        $query->when($filters['skill'] ?? false ,function($query,$skill_id){
+            $query
+            ->where('skill_id',$skill_id)
+            ->get();
+        });
+    }
+
+    public function name($lang = null){
+        $lang=$lang ?? App::getLocale();
+        return json_decode($this->name)->$lang;
+    }
 
 
     public function skill()
@@ -42,8 +64,9 @@ class Exam extends Model
         );
     }
 
-    // public function examStatus(){
-    //     $record=DB::table('exam_user')->where('user_id',auth()->user()->id)->where('exam_id',$this->id)->first();
-    //     return $record->status;
-    // }
+    public function mostExams(){
+        return $this->withCount('users')->orderBy('users_count','desc')->get();
+    }
+
+
 }

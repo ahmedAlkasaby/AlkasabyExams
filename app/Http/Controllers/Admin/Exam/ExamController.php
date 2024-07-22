@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Exam;
 
 use App\Events\AdExamEvent;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Exam;
 use App\Models\Question;
 use App\Models\Skill;
@@ -17,9 +18,12 @@ use Illuminate\Support\Str;
 class ExamController extends Controller
 {
     public function index(){
-        $exams=Exam::orderBy('id','desc')->paginate(5);
+
+        $exams=Exam::latest()->filter(request(['search','skill']))->paginate(5);
+        $skills=Skill::all();
         return view('admin.exams.index',[
-            'exams'=>$exams
+            'exams'=>$exams,
+            'skills'=>$skills
         ]);
     }
 

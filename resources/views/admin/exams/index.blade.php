@@ -14,6 +14,7 @@
                 <li class="breadcrumb-item active">index</li>
             </ol>
         </div><!-- /.col -->
+
     </div><!-- /.row -->
 </div>
 @endsection
@@ -28,6 +29,29 @@
                 <a href="{{ route('createExam') }}" type="button" class="btn btn-primary">
                     New
                 </a>
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <form action="{{ route('allExams') }}" method="GET">
+                            <input type="text" name="search" class="form-control float-right" placeholder="Search"
+                                value="{{ request('search') }}">
+                                <select  name="skill"  class="custom-select">
+                                    <option value="">select skill</option>
+                                    @foreach ($skills as $skill)
+
+
+                                    <option value="{{ $skill->id }}">{{ json_decode($skill->name)->en }}</option>
+
+                                    @endforeach
+                                </select>
+
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-default">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
             </div>
             @include('admin.includes.sessions')
@@ -55,25 +79,27 @@
                         @foreach ($exams as $exam)
                         <tr>
                             <td>{{ $i++ }}</td>
-                            <td>{{ json_decode($exam->name)->ar }}</td>
-                            <td>{{ json_decode($exam->name)->en }}</td>
+                            <td>{{ $exam->name("ar") }}</td>
+                            <td>{{ $exam->name("en") }}</td>
                             <td>{{ json_decode($exam->skill->name)->en}}</td>
                             <td>{{ $exam->questions }}</td>
                             <td>{{ $exam->duration_minates }}</td>
                             <td>{{ $exam->difficulty }}</td>
                             <td>
 
-                                <a href="{{ route('allQuestions',['examId'=>$exam->id]) }}"><button type="button" class="btn btn-info">Questions</button></a>
+                                <a href="{{ route('allQuestions',['examId'=>$exam->id]) }}"><button type="button"
+                                        class="btn btn-info">Questions</button></a>
 
 
-                                <a href="{{ route('showExam',['id'=>$exam->id]) }}"><button type="button" class="btn btn-primary">show</button></a>
+                                <a href="{{ route('showExam',['id'=>$exam->id]) }}"><button type="button"
+                                        class="btn btn-primary">show</button></a>
 
-                                <a href="{{ route('editExam',['id'=>$exam->id]) }}"><button type="button" class="btn btn-secondary">edit</button></a>
+                                <a href="{{ route('editExam',['id'=>$exam->id]) }}"><button type="button"
+                                        class="btn btn-secondary">edit</button></a>
 
-                                <a href="{{ route('deleteExam',['id'=>$exam->id]) }}"><button type="button" onclick="return confirm('Are You Sure From Delete')" class="btn btn-danger">Delete</button></a>
-
-
-
+                                <a href="{{ route('deleteExam',['id'=>$exam->id]) }}"><button type="button"
+                                        onclick="return confirm('Are You Sure From Delete')"
+                                        class="btn btn-danger">Delete</button></a>
                             </td>
                         </tr>
                         @endforeach
