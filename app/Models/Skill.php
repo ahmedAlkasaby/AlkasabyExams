@@ -4,20 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 
-class Skill extends Model
+class Skill extends BaseModel
 {
-    protected $fillable=[
-        'name',
-        'image',
-        'category_id',
-        'slug'
-    ];
-    use HasFactory;
+    // protected $fillable=[
+    //     'name',
+    //     'image',
+    //     'category_id',
+    //     'slug'
+    // ];
+    // use HasFactory;
 
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function name($lang = null){
+        return $this->getTranslatedAttribute('name',$lang);
     }
 
     public function exams()

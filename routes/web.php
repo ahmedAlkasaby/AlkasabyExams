@@ -1,22 +1,24 @@
 <?php
 
-use App\Models\Category;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-
-use Illuminate\Support\Facades\Redirect;
-use App\Http\Controllers\RedirctController;
-use App\Http\Controllers\Website\HomeController;
-use App\Http\Controllers\Auth\RedirectController;
+use App\Http\Controllers\Admin\Admin\AdminController;
+use App\Http\Controllers\Admin\Category\CategoryController;
 use App\Http\Controllers\Admin\DashBoardController;
 use App\Http\Controllers\Admin\Exam\ExamController;
-use App\Http\Controllers\Admin\Admin\AdminController;
-use App\Http\Controllers\Admin\Skill\SkillController;
+
 use App\Http\Controllers\Admin\Exam\QuestionController;
+use App\Http\Controllers\Admin\Skill\SkillController;
 use App\Http\Controllers\Admin\Student\StudentController;
-use App\Http\Controllers\Admin\Category\CategoryController;
+use App\Http\Controllers\Auth\RedirectController;
+use App\Http\Controllers\LangController;
+use App\Http\Controllers\RedirctController;
+use App\Http\Controllers\Website\HomeController;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -39,14 +41,7 @@ use Illuminate\Http\Request;
 
 
 
-Route::get('lang/{lang}',function($lang ,Request $request){
-$acceptlangs=['en','ar'];
-if(! in_array($lang,$acceptlangs)){
-    $lang="en";
-}
-$request->session()->put("lang",$lang);
-    return back();
-})->name('lang');
+Route::get('lang/{lang}',[LangController::class, 'setLang'])->name('lang');
 
 
 

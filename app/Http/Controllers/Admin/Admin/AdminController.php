@@ -15,7 +15,7 @@ class AdminController extends Controller
         $user=Auth::user();
         $admins=User::where('role_id','>',1)->whereNot('id', $user->id)->get();
         $roles=Role::get();
-        return view('admin.admins',[
+        return view('admin.admins.admins',[
             'admins'=>$admins,
             'roles'=>$roles
         ]);

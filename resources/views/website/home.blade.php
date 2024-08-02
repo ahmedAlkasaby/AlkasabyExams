@@ -53,26 +53,19 @@ Home
                             <img src="{{ asset($exam->image) }}" alt="">
                             <i class="course-link-icon fa fa-link"></i>
                         </a>
-                        <a class="course-title" href="{{ route('exam',['slug'=>$exam->slug]) }}">{{ json_decode($exam->name)->en }}</a>
+                        <a class="course-title" href="{{ route('exam',['slug'=>$exam->slug]) }}">{{$exam->name($lang)}}</a>
                         <div class="pull-right">
                             <span class="blog-meta-comments"><a href="#"><i class="fa fa-users"></i>{{ $exam->users->count() }}</a></span>
                         </div>
                         <div class="course-details">
-                            <span class="course-category">{{ json_decode($exam->skill->category->name)->en }}</span>
-
+                            <span class="course-category">{{ $exam->skill->category->name($lang) }}</span>
                         </div>
                     </div>
                 </div>
                 @endforeach
             </div>
         </div>
-        <!-- /courses -->
-        <div class="row">
-            <div class="center-btn">
-                <a class="main-button icon-button" href="#">More Courses</a>
-            </div>
-        </div>
-    </div>
+       {{ $popularExams->links() }}
     <!-- container -->
 
 </div>

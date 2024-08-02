@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
 
-class Exam extends Model
+class Exam extends BaseModel
 {
     protected $fillable=[
         'skill_id',
@@ -21,7 +21,7 @@ class Exam extends Model
         'questions',
         'slug'
     ];
-    use HasFactory;
+
 
     use Searchable;
 
@@ -39,9 +39,9 @@ class Exam extends Model
     }
 
     public function name($lang = null){
-        $lang=$lang ?? App::getLocale();
-        return json_decode($this->name)->$lang;
+        return $this->getTranslatedAttribute('name',$lang);
     }
+
 
 
     public function skill()
@@ -65,7 +65,7 @@ class Exam extends Model
     }
 
     public function mostExams(){
-        return $this->withCount('users')->orderBy('users_count','desc')->get();
+        return $this->withCount('users')->orderBy('users_count','desc')->paginate(8);
     }
 
 

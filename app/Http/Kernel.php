@@ -56,6 +56,7 @@ class Kernel extends HttpKernel
         'auth' => \App\Http\Middleware\Authenticate::class,
         'lang' => \App\Http\Middleware\LangMiddleware::class,
         'auth-api' => \App\Http\Middleware\ApiAuthMiddleware::class,
+        'submit-exam-api' => \App\Http\Middleware\ApiSubmitExamMiddleware::class,
         'api-can-enter-exam' => \App\Http\Middleware\ApiCanEenterExam::class,
         'can-inter-exam' => \App\Http\Middleware\CanEnterExamMiddleware::class,
         'super_admin' => \App\Http\Middleware\SuperAdminMiddleware::class,

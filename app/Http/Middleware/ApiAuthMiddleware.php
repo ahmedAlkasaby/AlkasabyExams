@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class ApiAuthMiddleware
@@ -16,23 +17,15 @@ class ApiAuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $access_token=$request->header('access_token');
+        $user = Auth::guard('api')->user();
+        if($user){
+            return $next($request);
 
-        if($access_token){
-            $user=User::where('access_token',$access_token)->first();
-            // dd($user);
-
-            if($user){
-                return $next($request);
-            }else{
-                return response()->json([
-                    'message'=>'حدث شي خطا اثناء تسجيل الدخول'
-                ],404);
-            }
         }else{
             return response()->json([
-                'message'=>'انت لست مسجل دخول'
-            ],404);
+                'message'=>'NOT AUTH'
+            ]);
         }
+        
     }
 }

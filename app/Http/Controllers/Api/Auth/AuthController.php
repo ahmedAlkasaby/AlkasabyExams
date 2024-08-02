@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Notifications\RegisterMail;
 use App\Notifications\VerfyEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -25,20 +26,25 @@ class AuthController extends Controller
             return response()->json(['errors'=>$validator->errors()],404);
         }
 
-        $access_token=Str::random(64);
-        $user=User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=>$request->password,
-            'access_token'=>$access_token
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
+
+        $token = Auth::guard('api')->login($user);
 
         $user->notify(new VerfyEmail());
 
         return response()->json([
-            'access_token'=>$user->access_token,
-            'user'=>$user->name
-        ],201);
+            'status' => 'success',
+            'message' => 'User created successfully',
+            'user' => $user,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
+        ]);
     }
 
 
@@ -54,43 +60,31 @@ class AuthController extends Controller
             ],404);
         }
 
-
-        $user=User::where('email',$request->email)->first();
-        if($user){
-            $password_correct=Hash::check($request->password,$user->password);
-            if($password_correct){
-                $access_token=Str::random(64);
-                User::where('id',$user->id)->update([
-                    'access_token'=>$access_token
-                ]);
-                $user_updated=User::find($user->id);
-                return response()->json([
-                    'message'=>'login successfully',
-                    'user'=>$user->name,
-                    'access_token'=>$user_updated->access_token
-                ],201);
-
-
-            }else{
-                return response()->json([
-                    'message'=>'The Password not correct'
-                ]);
-            }
-        }else{
+        $credentials = $request->only('email', 'password');
+        $token=Auth::guard('api')->attempt($credentials);
+        if (!$token) {
             return response()->json([
-                'message'=>'حدث شي خطا اثنا تسجيل الدخول'
-            ]);
+                'status' => 'error',
+                'message' => 'Unauthorized',
+            ], 401);
         }
+        $user = Auth::guard('api')->user();
+        return response()->json([
+                'status' => 'success',
+                'user' => $user,
+                'authorisation' => [
+                    'token' => $token,
+                    'type' => 'bearer',
+                ]
+            ]);
+
     }
 
     public function logout(Request $request){
-        $access_token=$request->header('access_token');
-        User::where('access_token',$access_token)->update([
-            'access_token'=>null
-        ]);
-
+        Auth::guard('api')->logout();
         return response()->json([
-            'message'=>'تم تسجيل الخروج بنجاح'
+            'status' => 'success',
+            'message' => 'Successfully logged out',
         ]);
     }
 }

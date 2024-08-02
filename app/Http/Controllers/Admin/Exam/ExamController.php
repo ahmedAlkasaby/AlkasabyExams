@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Exam;
 
+use App;
 use App\Events\AdExamEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
@@ -21,9 +22,11 @@ class ExamController extends Controller
 
         $exams=Exam::latest()->filter(request(['search','skill']))->paginate(5);
         $skills=Skill::all();
+        $lang=App::getLocale();
         return view('admin.exams.index',[
             'exams'=>$exams,
-            'skills'=>$skills
+            'skills'=>$skills,
+            'lang'=>$lang
         ]);
     }
 

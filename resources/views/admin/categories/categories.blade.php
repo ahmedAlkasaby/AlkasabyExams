@@ -38,8 +38,8 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Name AR</th>
-                            <th>Name EN</th>
+                            <th>Name </th>
+
                             <th>Created At</th>
                             <th>Actions</th>
 
@@ -52,8 +52,8 @@
                         @foreach ($categories as $category)
                         <tr>
                             <td>{{ $i++ }}</td>
-                            <td>{{ json_decode($category->name)->ar }}</td>
-                            <td>{{ json_decode($category->name)->en }}</td>
+                            <td>{{ $category->name($lang)}}</td>
+
                             <td>{{ $category->created_at->format('Y-M-D') }}</td>
                             <td>
                                 {{-- <button type="button" class="btn btn-secondary">Edit</button> --}}

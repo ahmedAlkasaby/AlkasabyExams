@@ -37,7 +37,7 @@
                                     <option value="">select Category</option>
                                     @foreach ($categories as $category)
                                     <option {{ request('category') == $category->id ? 'selected' : ''}} value="{{ $category->id }}">{{ json_decode($category->name)->en }}</option>
-                                    
+
                                     @endforeach
                                 </select>
 
@@ -61,7 +61,7 @@
                         <tr>
                             <th>#</th>
                             <th>Name AR</th>
-                            <th>Name EN</th>
+
                             <th>Category</th>
                             <th>Image</th>
                             <th>Created At</th>
@@ -76,8 +76,8 @@
                         @foreach ($skills as $skill)
                         <tr>
                             <td>{{ $i++ }}</td>
-                            <td>{{ json_decode($skill->name)->ar }}</td>
-                            <td>{{ json_decode($skill->name)->en }}</td>
+                            <td>{{ $skill->name($lang) }}</td>
+
                             <td>{{ json_decode($skill->category->name)->en }}</td>
                             <td>
                                 <img src="{{ asset('uploads/'.$skill->image) }}" class="rounded mx-auto d-block" alt="..." width="50" height="50">

@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Skill;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -16,9 +17,11 @@ class SkillController extends Controller
         // $skills=Skill::orderBy('id','desc')->paginate(5);
         $skills=Skill::orderBy('id','desc')->filter(request(['search','category']))->paginate(5);
         $categories=Category::get();
-        return view('admin.skills',[
+        $lang=App::getLocale();
+        return view('admin.skills.skills',[
             'skills'=>$skills,
-            'categories'=>$categories
+            'categories'=>$categories,
+            'lang'=>$lang
 
         ]);
     }

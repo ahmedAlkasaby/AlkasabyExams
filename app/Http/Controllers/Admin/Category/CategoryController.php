@@ -5,15 +5,18 @@ namespace App\Http\Controllers\Admin\Category;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-    
+
     public function index(){
         $categories=Category::orderBy('id','desc')->paginate(5);
-        return view('admin.categories',[
-            'categories'=>$categories
+        $lang=App::getLocale();
+        return view('admin.categories.categories',[
+            'categories'=>$categories,
+            'lang'=>$lang
         ]);
     }
 

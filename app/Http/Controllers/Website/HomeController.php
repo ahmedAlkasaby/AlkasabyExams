@@ -8,6 +8,7 @@ use App\Models\Exam;
 use App\Models\Skill;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -16,11 +17,15 @@ class HomeController extends Controller
     public function popularExams(){
 
         $exams=new Exam();
-     
+
         // $popularExams=Exam::withCount('users')
         //     ->orderBy('users_count', 'desc')
         //     ->get();
-        return view('website.home',['popularExams'=>$exams->mostExams()]);
+        $lang=App::getLocale();
+        return view('website.home',[
+            'popularExams'=>$exams->mostExams(),
+            'lang'=>$lang
+        ]);
     }
 
 

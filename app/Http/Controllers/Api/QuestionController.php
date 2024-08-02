@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class QuestionController extends Controller
@@ -17,8 +18,7 @@ class QuestionController extends Controller
     public function startExam(Request $request,$examId){
         $exam=Exam::find($examId);
         if($exam){
-            $access_token=$request->header('access_token');
-            $user=User::where('access_token',$access_token)->first();
+           $user=Auth::guard('api')->user();
             DB::table('exam_user')->insert([
                 'user_id' =>$user->id,
                 'exam_id'=>$examId,
@@ -48,8 +48,7 @@ class QuestionController extends Controller
             if($validator->fails()){
                 return response()->json(['errors'=>$validator->errors()],404);
             }
-            $access_token=$request->header('access_token');
-            $user=User::where('access_token',$access_token)->first();
+           $user=Auth::guard('api')->user();
 
             $exam=Exam::find($examId);
 
@@ -78,7 +77,7 @@ class QuestionController extends Controller
                 $durationOfExam=$endExam->diffInMinutes($startExam);
 
                 // dd($durationOfExam);
-                
+
                 // if($durationOfExam > $exam->duration_minates){
                 //     DB::table('exam_user')
                 //     ->where('user_id',$user->id)

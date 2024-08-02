@@ -2,14 +2,14 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
-use Auth;
+use App\Models\Exam;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
-class ApiCanEenterExam
+class ApiSubmitExamMiddleware
 {
     /**
      * Handle an incoming request.
@@ -20,17 +20,24 @@ class ApiCanEenterExam
     {
         $user=Auth::guard('api')->user();
         $examId=$request->route()->parameter('ExamId');
-
+        $exam=Exam::find($examId);
+        if($exam){
         $pivoteRecord=DB::table('exam_user')->where('user_id',$user->id)->where('exam_id',$examId)->first();
-    
-
-        if($pivoteRecord==null || $pivoteRecord->satus=='open'){
+        if($pivoteRecord->result==null){
             return $next($request);
+
         }else{
             return response()->json([
-                'message'=>'غير مسموحلك دخول هدا الامتحان'
+                'message'=>'تم ارسال الامتحان من قبل'
             ]);
         }
+
+        }else{
+            return response()->json([
+                'message'=>'the exam not found'
+            ]);
+        }
+
 
     }
 }

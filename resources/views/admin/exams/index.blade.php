@@ -39,7 +39,7 @@
                                     @foreach ($skills as $skill)
 
 
-                                    <option value="{{ $skill->id }}">{{ json_decode($skill->name)->en }}</option>
+                                    <option value="{{ $skill->id }}">{{ $skill->name($lang) }}</option>
 
                                     @endforeach
                                 </select>
@@ -63,7 +63,7 @@
                         <tr>
                             <th>#</th>
                             <th>Name AR</th>
-                            <th>Name EN</th>
+
                             <th>Skill</th>
                             <th>Question_no</th>
                             <th>Duration Mins</th>
@@ -79,8 +79,8 @@
                         @foreach ($exams as $exam)
                         <tr>
                             <td>{{ $i++ }}</td>
-                            <td>{{ $exam->name("ar") }}</td>
-                            <td>{{ $exam->name("en") }}</td>
+                            <td>{{ $exam->name($lang) }}</td>
+
                             <td>{{ json_decode($exam->skill->name)->en}}</td>
                             <td>{{ $exam->questions }}</td>
                             <td>{{ $exam->duration_minates }}</td>
