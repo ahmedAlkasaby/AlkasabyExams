@@ -16,8 +16,7 @@ class CategoryResouce extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'name_ar'=>json_decode($this->name)->ar,
-            'name_en'=>json_decode($this->name)->en,
+            'name'=>$this->name(),
             'skills'=>SkillResource::collection($this->whenLoaded('skills')),
         ];
     }

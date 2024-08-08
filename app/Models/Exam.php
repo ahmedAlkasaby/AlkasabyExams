@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use function PHPSTORM_META\map;
+
+use Auth;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class BaseModel extends Model
 {
@@ -16,8 +17,14 @@ class BaseModel extends Model
     public function getTranslatedAttribute($attribute, $lang = null)
     {
         $lang = $lang ?? App::getLocale();
-        $value = json_decode($this->{$attribute});
-        return $value->$lang ?? $value->en; // Assuming English as fallback
+
+        $user=Auth::guard('api')->user();
+        if($user){
+            $userLang=$user->lang;
+            return json_decode($this->$attribute)->$userLang;
+       }else{
+            return json_decode($this->$attribute)->$lang;
+        }
     }
 
 

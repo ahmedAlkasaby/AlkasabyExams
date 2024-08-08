@@ -183,6 +183,7 @@ namespace App\Models{
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property mixed $password
+ * @property string|null $lang
  * @property int $role_id
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -202,6 +203,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLang($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)

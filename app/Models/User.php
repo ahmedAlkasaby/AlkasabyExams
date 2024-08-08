@@ -24,7 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail , JWTSubject
         'email',
         'password',
         'role_id',
-
+        'lang',
     ];
 
 
@@ -49,7 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail , JWTSubject
             'result',
                     'status',
                     'duration_min',
-                    'created_at'
+                    'created_at',
         );
     }
 

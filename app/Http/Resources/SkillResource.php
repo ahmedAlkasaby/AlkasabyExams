@@ -15,10 +15,9 @@ class SkillResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'category_id '=>$this->category->name,
+            'category_id '=>$this->category->name(),
             'image'=>$this->image,
-            'name_ar'=>json_decode($this->name)->ar,
-            'name_en'=>json_decode($this->name)->en,
+            'name'=>$this->name(),
             'created_at'=>$this->created_at->format('Y-M-D'),
             'exams'=>ExamResource::collection($this->whenLoaded('exams'))
         ];

@@ -38,6 +38,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+
 // Route::get('lang/{lang}',[LangController::class, 'setLang'])->name('lang');
 
 Route::group(['prefix'=>'auth'],function(){
@@ -50,7 +52,7 @@ Route::group(['prefix'=>'auth'],function(){
     Route::post('rest/password',[RestPasswordController::class,'RestPassword']);
 });
 
-// Route::group(['middleware'=>'lang'],function(){
+
     Route::get('/popularExams',[ExamController::class,'popularExams']);
     Route::get('showExam/{ExamId}',[ExamController::class, 'showExam']);
     Route::get('/categories',[CatController::class, 'index']);
@@ -61,7 +63,7 @@ Route::group(['prefix'=>'auth'],function(){
     Route::post('start/{ExamId}',[QuestionController::class, 'startExam'])->middleware('api-can-enter-exam');
     Route::post('submit/{ExamId}',[QuestionController::class, 'submitExam'])->middleware('submit-exam-api');
     });
-// });
+
 
 
 
