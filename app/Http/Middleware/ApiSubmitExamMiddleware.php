@@ -22,21 +22,47 @@ class ApiSubmitExamMiddleware
         $examId=$request->route()->parameter('ExamId');
         $exam=Exam::find($examId);
         if($exam){
-        $pivoteRecord=DB::table('exam_user')->where('user_id',$user->id)->where('exam_id',$examId)->first();
-        if($pivoteRecord->result==null){
-            return $next($request);
-
-        }else{
-            return response()->json([
-                'message'=>'تم ارسال الامتحان من قبل'
-            ]);
+            $pivoteRecord=DB::table('exam_user')->where('user_id',$user->id)->where('exam_id',$examId)->first();
+            if($pivoteRecord){
+                if($pivoteRecord->result==null){
+                    return $next($request);
+                }else{
+                    return response()->json([
+                        'message'=>'تم ارسال الامتحان من قبل',
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'message'=>'ارجع ابدا الامتحان ',
+                ]);
+            }
         }
-
-        }else{
+        else{
             return response()->json([
                 'message'=>'the exam not found'
             ]);
         }
+        // if($pivoteRecord){
+        //     if($pivoteRecord->result==null){
+        //         return $next($request);
+
+        //     }else{
+        //         return response()->json([
+        //             'message'=>'تم ارسال الامتحان من قبل'
+        //         ]);
+        //     }else{
+        //         return response()->json([
+        //             'message'=>'ممنوع الارسال'
+        //         ]);
+
+        //     }
+        // }else{
+        //     return response()->json([
+        //         'message'=>'the exam not found'
+        //     ]);
+        // }
+
+
 
 
     }

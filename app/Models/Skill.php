@@ -8,13 +8,6 @@ use Illuminate\Support\Facades\App;
 
 class Skill extends BaseModel
 {
-    // protected $fillable=[
-    //     'name',
-    //     'image',
-    //     'category_id',
-    //     'slug'
-    // ];
-    // use HasFactory;
 
     public function category()
     {

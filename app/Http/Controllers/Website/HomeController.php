@@ -102,6 +102,7 @@ class HomeController extends Controller
     }
 
     public function submitExam( Request $request ,$slug ){
+      
         $request->validate([
             'ans'=>'array',
             // 'ans.*'=>'required|in:1,2,3,4'
